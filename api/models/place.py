@@ -9,6 +9,7 @@ class Place(Base):
     __tablename__ = 'places'
     id = Column(Integer, primary_key=True, autoincrement=True)
     logo = Column(String)
+    name = Column(String)
     description = Column(String)
     location_photo = Column(String)
     market_id = Column(Integer, ForeignKey("markets.id"))
