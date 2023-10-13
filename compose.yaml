@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:14.5
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /data/postgres
+    networks:
+      - api
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/data/postgres
+
+  api:
+    image: python:3.11.4-alpine3.17
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: api/
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+    env_file:
+      - api/data/.env
+    networks:
+      - api
+
+networks:
+  api:
