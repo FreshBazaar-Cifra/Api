@@ -1,21 +1,8 @@
 from datetime import time
 
 from pydantic import BaseModel, ConfigDict, field_validator
-from pydantic.types import Decimal
-
-
-class MarketModel(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: int
-    name: str
-    images: list[str]
-    city: str
-    street: str | None = None
-    district: str | None = None
-    house: str
-    latitude: Decimal
-    longitude: Decimal
+from pydantic.types import Decimal, PositiveInt
+from pydantic_extra_types.coordinate import Latitude, Longitude
 
 
 class WorkingHourModel(BaseModel):
@@ -32,13 +19,39 @@ class WorkingHourModel(BaseModel):
             return value.strftime('%H:%M')
 
 
+class AddressModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    city: str
+    district: str | None = None
+    street: str
+    home: str
+    entrance: str | None = None
+    apartment: str | None = None
+    intercom: str | None = None
+    latitude: Latitude
+    longitude: Longitude
+
+
+class MarketModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: PositiveInt
+    name: str
+    images: list[str]
+    address: AddressModel
+    working_hours: list[WorkingHourModel]
+
+
 class PlaceModel(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: PositiveInt
     name: str
     logo: str
     description: str
     location_photo: str
     phones: list[str]
+    market: MarketModel
     working_hours: list[WorkingHourModel]
+

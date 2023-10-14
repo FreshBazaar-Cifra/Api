@@ -9,11 +9,10 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     first_name = Column(String, nullable=False)
-    last_name = Column(String)
+    last_name = Column(String, nullable=False)
     phone = Column(String)
     email = Column(String)
-    login = Column(String, nullable=False, unique=True)
-    password = Column(String, nullable=False)
+    avatar = Column(String)
 
     @classmethod
     async def get_by_login(cls, login: str, session: AsyncSession):

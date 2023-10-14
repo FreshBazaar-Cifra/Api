@@ -4,3 +4,4 @@ sqlalchemy==1.4.49
 asyncpg==0.28.0
 uvicorn==0.23.2
 pyjwt==2.8.0
+pydantic-extra-types==2.1.0

@@ -8,14 +8,10 @@ from models.db_session import SqlAlchemyBase as Base
 class Market(Base):
     __tablename__ = 'markets'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String)
-    images = Column(ARRAY(String))
-    city = Column(String)
-    street = Column(String)
-    district = Column(String)
-    house = Column(String)
-    latitude = Column(Numeric(9, 6))
-    longitude = Column(Numeric(9, 6))
+    name = Column(String, nullable=False)
+    images = Column(ARRAY(String), nullable=False)
+    address_id = Column(Integer, ForeignKey("addresses.id"), nullable=False)
+    address = relationship("Address", lazy="selectin")
     working_hours = relationship("WorkingHour", back_populates="market", lazy="selectin")
 
     @classmethod

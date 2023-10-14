@@ -9,11 +9,11 @@ class Place(Base):
     __tablename__ = 'places'
     id = Column(Integer, primary_key=True, autoincrement=True)
     logo = Column(String)
-    name = Column(String)
+    name = Column(String, nullable=False)
     description = Column(String)
-    location_photo = Column(String)
-    market_id = Column(Integer, ForeignKey("markets.id"))
-    market = relationship("Market")
+    location_photo = Column(String, nullable=False)
+    market_id = Column(Integer, ForeignKey("markets.id"), nullable=False)
+    market = relationship("Market", lazy="selectin")
     phones = Column(ARRAY(String))
     working_hours = relationship("WorkingHour", back_populates="place", lazy="selectin")
 

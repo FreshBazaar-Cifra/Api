@@ -5,5 +5,13 @@ from .place import Place
 from .position import Position
 from .product import Product
 from .promo import Promocode
+from .category import Category
+from .product import Product
 from .user import User
 from .working_hour import WorkingHour
+from .favorite import Favorite
+from .order_rating import OrderRating
+from .product_rating import ProductRating
+from .basket import Basket
+from .address import Address
+from .favorite import Favorite

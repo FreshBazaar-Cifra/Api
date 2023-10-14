@@ -1,13 +1,17 @@
 from datetime import datetime
+from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, field_validator
-from pydantic.types import Decimal
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from pydantic.types import PositiveInt
+
+from models import ProductRating
+from pydantic_models.place import AddressModel, MarketModel
 
 
 class DeliverymanModel(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: PositiveInt
     first_name: str
     last_name: str
     reg_date: str
@@ -23,9 +27,9 @@ class DeliverymanModel(BaseModel):
 class PromocodeModel(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: PositiveInt
     sale: int
-    code: int
+    code: str
 
 
 class PromocodeCheckIn(BaseModel):
@@ -34,16 +38,71 @@ class PromocodeCheckIn(BaseModel):
 
 
 class PromocodeCheckOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     price: float
+
+
+class PaymentLink(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    url: str
+    amount: float
+
+
+class AttributeModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    key: str
+    value: str
+
+
+class ProductCategoryModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: PositiveInt
+    name: str
+
+
+class ProductModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: PositiveInt
+    place_id: int
+    description: str
+    images: list[str]
+    name: str
+    price: float
+    weight: int
+    category: ProductCategoryModel
+    estimate: float | None = None
+    attributes: list[AttributeModel]
+
+
+class PositionModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    product: ProductModel
+    count: int
+
+
+class OrderPositionModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    product_id: int
+    count: int
 
 
 class OrderModel(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: PositiveInt
     date: str
-    status: str
-    deliveryman: DeliverymanModel
+    status: Literal["ordered", "paid", "confirmed", "delivered"]
+    deliveryman: DeliverymanModel | None = None
+    market: MarketModel
+    address: AddressModel
+    positions: list[PositionModel]
     price: float
     delivery_price: float
     promocode: PromocodeModel | None = None
@@ -56,37 +115,21 @@ class OrderModel(BaseModel):
             return value.isoformat(sep=' ', timespec='seconds')
 
 
-class PaymentLink(BaseModel):
+class CreateOrderModel(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    url: str
-    amount: float
+    address_id: PositiveInt
+    market_id: int
+    positions: list[OrderPositionModel]
+    promocode_id: int | None = None
 
 
-class PositionModel(BaseModel):
+class OrderRatingModel(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
-    order_id: int
-    product_id: int
-    count: int
+    order_estimate: PositiveInt
+    delivery_estimate: PositiveInt
 
 
-class AttributeModel(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    key: str
-    value: str
-    product_id: int
-
-
-class ProductModel(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: int
-    place_id: int
-    description: str
-    images: list[str]
-    name: str
-    price: Decimal
-    attributes: list[AttributeModel]
+class ProductRatingModel(BaseModel):
+    estimate: float
