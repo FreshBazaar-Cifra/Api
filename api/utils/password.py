@@ -13,3 +13,4 @@ def hash_password(password: str, salt: str = HASH_SALT) -> str:
     # Return the salt and the hexadecimal representation of the hash
     return sha256.hexdigest()
 
+

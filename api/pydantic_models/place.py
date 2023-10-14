@@ -52,6 +52,7 @@ class PlaceModel(BaseModel):
     description: str
     location_photo: str
     phones: list[str]
+    estimate: float | None = None
     market: MarketModel
     working_hours: list[WorkingHourModel]
 

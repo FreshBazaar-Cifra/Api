@@ -15,3 +15,4 @@ from .product_rating import ProductRating
 from .basket import Basket
 from .address import Address
 from .favorite import Favorite
+from .place_rating import PlaceRating

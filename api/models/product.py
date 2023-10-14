@@ -1,5 +1,3 @@
-import datetime
-
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, ARRAY, Numeric, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import relationship
@@ -19,6 +17,7 @@ class Product(Base):
     name = Column(String, nullable=False)
     price = Column(Numeric(10, 2), nullable=False)
     weight = Column(Integer, nullable=False)
+    manufacturer = Column(String)
     attributes = relationship("Attribute", lazy="selectin")
 
     @classmethod

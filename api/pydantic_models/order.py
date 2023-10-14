@@ -76,6 +76,7 @@ class ProductModel(BaseModel):
     weight: int
     category: ProductCategoryModel
     estimate: float | None = None
+    manufacturer: str
     attributes: list[AttributeModel]
 
 
@@ -132,4 +133,12 @@ class OrderRatingModel(BaseModel):
 
 
 class ProductRatingModel(BaseModel):
-    estimate: float
+    model_config = ConfigDict(from_attributes=True)
+
+    estimate: float | int
+
+
+class PlaceRatingModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    estimate: float | int

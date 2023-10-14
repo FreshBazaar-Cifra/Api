@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 
-from routes import user, market, order, place, product, favorite, basket, promocode
+from routes import user, market, order, place, product, favorite, basket, promocode, rating
 
 from models.db_session import global_init, create_session
 
@@ -26,6 +26,7 @@ app.include_router(place.router, prefix="/place", tags=["place"])
 app.include_router(promocode.router, prefix="/promocode", tags=["promocode"])
 app.include_router(favorite.router, prefix="/favorite", tags=["favorite"])
 app.include_router(basket.router, prefix="/basket", tags=["basket"])
+app.include_router(rating.router, prefix="/rating", tags=["rating"])
 
 
 app.add_middleware(

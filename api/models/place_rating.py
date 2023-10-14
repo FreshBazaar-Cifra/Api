@@ -4,39 +4,39 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from models.db_session import SqlAlchemyBase as Base, session_db
 
 
-class ProductRating(Base):
-    __tablename__ = 'product_ratings'
+class PlaceRating(Base):
+    __tablename__ = 'place_ratings'
     id = Column(Integer, autoincrement=True, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
+    place_id = Column(Integer, ForeignKey("places.id"), nullable=False)
     estimate = Column(SmallInteger, nullable=False)
 
     @classmethod
-    async def get_by_product_id(cls, product_id: int, user_id: int, session: AsyncSession):
+    async def get_by_place_id(cls, place_id: int, user_id: int, session: AsyncSession):
         """
-        Get rating by product and user
+        Get rating by place and user
 
-        :param product_id: id of product from db
+        :param place_id: id of place from db
         :param user_id: id of user from db
         :param session: db session
         :return: rating
-        :rtype: ProductRating
+        :rtype: PlaceRating
         """
 
-        _ = await session.execute(select(cls).where(cls.product_id == product_id, cls.user_id == user_id))
+        _ = await session.execute(select(cls).where(cls.place_id == place_id, cls.user_id == user_id))
         return _.scalar()
 
     @classmethod
-    async def get_average_estimate(cls, product_id: int, session: AsyncSession) -> float:
+    async def get_average_estimate(cls, place_id: int, session: AsyncSession) -> float:
         """
-        Getting the average estimate of exact product
+        Getting the average estimate of exact place
 
-        :param product_id: id of product
+        :param place_id: id of place
         :param session: db session
         :return: average estimate
         """
 
-        _ = await session.execute(select(cls.estimate).where(cls.product_id == product_id))
+        _ = await session.execute(select(cls.estimate).where(cls.place_id == place_id))
         estimates = _.scalars().all()
         return sum(estimates) / len(estimates) if estimates else None
 
